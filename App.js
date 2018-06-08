@@ -28,7 +28,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
 	webView: {
-		height: 300,
-		width: '100%',
+		// width: '100%',
 	},
 });
