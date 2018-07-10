@@ -65,11 +65,16 @@ export default class App extends React.Component {
         console.log(event.url);
         console.log(event.navigationState);
 
-        if (event.url === 'https://www.mywebsiteexample.com/') {
-            return true;
-        } else {
-            return false;
-        }
+        // if (event.url === 'https://www.mywebsiteexample.com/') {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+
+
+        return true;
+
+
     }
     onNavigationStateChange = ( event ) => {
         console.log(event);
