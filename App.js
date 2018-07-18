@@ -1,8 +1,9 @@
 
 import React from 'react';
 import {
-	StyleSheet,
-	WebView,
+    StyleSheet,
+    WebView,
+    Platform,
 } from 'react-native';
 
 
@@ -12,7 +13,7 @@ var SITE_URL = 'http://118.31.61.9:7070/';
 
 export default class App extends React.Component {
 
-    constructor () {
+    constructor() {
         super();
         this.state = {
             url: SITE_URL,
@@ -34,33 +35,33 @@ export default class App extends React.Component {
         }
     }
 
-    goBack () {
+    goBack() {
         // you can use this callback to control web view
         this.refs.webViewAndroidSample.goBack();
     }
-    goForward () {
+    goForward() {
         this.refs.webViewAndroidSample.goForward();
     }
-    reload () {
+    reload() {
         this.refs.webViewAndroidSample.reload();
     }
-    stopLoading () {
+    stopLoading() {
         // stops the current load
         this.refs.webViewAndroidSample.stopLoading();
     }
-    postMessage = ( data ) => {
+    postMessage = (data) => {
         // posts a message to web view
         this.refs.webViewAndroidSample.postMessage(data);
     }
-    evaluateJavascript = ( data ) => {
+    evaluateJavascript = (data) => {
         // evaluates javascript directly on the webview instance
         this.refs.webViewAndroidSample.evaluateJavascript(data);
     }
-    injectJavaScript = ( script ) => {
+    injectJavaScript = (script) => {
         // executes JavaScript immediately in web view
         this.refs.webViewAndroidSample.injectJavaScript(script);
     }
-    onShouldStartLoadWithRequest = ( event ) => {
+    onShouldStartLoadWithRequest = (event) => {
         // currently only url & navigationState are returned in the event.
         console.log(event.url);
         console.log(event.navigationState);
@@ -76,7 +77,7 @@ export default class App extends React.Component {
 
 
     }
-    onNavigationStateChange = ( event ) => {
+    onNavigationStateChange = (event) => {
         console.log(event);
         this.setState({
             backButtonEnabled: event.canGoBack,
@@ -86,12 +87,12 @@ export default class App extends React.Component {
             loading: event.loading
         });
     }
-    onMessage = ( event ) => {
+    onMessage = (event) => {
         this.setState({
             messageFromWebView: event.message
         });
     }
-    javascriptToInject () {
+    javascriptToInject() {
         return `
         $(document).ready(function() {
           $('a').click(function(event) {
@@ -104,21 +105,38 @@ export default class App extends React.Component {
       `
     }
 
-    render () {
-        return (
-            <WebViewAndroid
-                ref="webViewAndroidSample"
-                javaScriptEnabled={true}
-                geolocationEnabled={false}
-                builtInZoomControls={false}
-                injectedJavaScript={this.javascriptToInject()}
-                onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-                onNavigationStateChange={this.onNavigationStateChange}
-                onMessage={this.onMessage}
-                url={SITE_URL}
-                style={styles.containerWebView}
-            />
-        )
+    render() {
+
+        if (Platform.OS === 'android') {
+            return (
+                <WebViewAndroid
+                    ref="webViewAndroidSample"
+                    javaScriptEnabled={true}
+                    geolocationEnabled={false}
+                    builtInZoomControls={false}
+                    injectedJavaScript={this.javascriptToInject()}
+                    onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+                    onNavigationStateChange={this.onNavigationStateChange}
+                    onMessage={this.onMessage}
+                    url={SITE_URL}
+                    style={styles.containerWebView}
+                />
+            )
+        } else {
+            return (
+                <WebView
+                    style={styles.iosWebView}
+                    source={{ uri: SITE_URL }}
+                    javaScriptEnabled={true}
+                    decelerationRate="normal"
+                    onShouldStartLoadWithRequest={() => true}
+                    startInLoadingState={true}
+                    scalesPageToFit={false}
+                />
+            )
+        }
+
+
     }
 }
 
@@ -126,5 +144,8 @@ export default class App extends React.Component {
 var styles = StyleSheet.create({
     containerWebView: {
         flex: 1,
+    },
+    iosWebView: {
+        marginTop: 20,
     }
 });
