@@ -9,7 +9,7 @@ import {
 
 var WebViewAndroid = require('react-native-webview-android');
 
-var SITE_URL = 'http://118.31.61.9:7070/';
+var SITE_URL = 'http://m.idream.site?mode=webview';
 
 export default class App extends React.Component {
 
