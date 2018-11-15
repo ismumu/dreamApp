@@ -1,4 +1,4 @@
-package com.dreamapp;
+package com.idreamapp;
 
 import android.app.Application;
 
